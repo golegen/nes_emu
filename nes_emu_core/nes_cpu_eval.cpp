@@ -125,7 +125,7 @@ void NES::CPU::eval() {
         break;
     case OP::CMP:
         result = A - mmu->read(nowAddr);
-        FLAG(this, result > 0, OP::C);
+        FLAG(this, result >= 0, OP::C);
         FLAG_Z();
         FLAG_N();
         if(readExtraCycle)
@@ -133,13 +133,13 @@ void NES::CPU::eval() {
         break;
     case OP::CPX:
         result = X - mmu->read(nowAddr);
-        FLAG(this, result > 0, OP::C);
+        FLAG(this, result >= 0, OP::C);
         FLAG_Z();
         FLAG_N();
         break;
     case OP::CPY:
         result = Y - mmu->read(nowAddr);
-        FLAG(this, result > 0, OP::C);
+        FLAG(this, result >= 0, OP::C);
         FLAG_Z();
         FLAG_N();
         break;
