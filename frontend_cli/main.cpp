@@ -1,5 +1,5 @@
 #include <iostream>
-#include "nes.h"
+#include "../nes_emu_core/nes.h"
 #include <unistd.h>
 #include <chrono>
 #include <thread>
