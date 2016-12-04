@@ -1,3 +1,10 @@
+# NetBeans IDE
 build
 dist
-nbproject
+nbproject/
+
+#CLion IDE
+.idea/
+
+#CMake
+cmake-build-debug/
