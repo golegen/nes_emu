@@ -29,8 +29,8 @@ void NES::CPU::tick() {
         ins=mmu->read(PC());
         decode();
         char msg[128];
-        sprintf(msg, "[PC=$%04X, %c%c%c%c%c%c%c%c] $%02X %s"
-                , PC(), getFlag(OP::N)?'N':'.', getFlag(OP::V)?'V':'.'
+        sprintf(msg, "[PC=$%04X, A=$%02X, X=$%02X, Y=$%02X, %c%c%c%c%c%c%c%c] $%02X %s"
+                , PC(), A, X, Y, getFlag(OP::N)?'N':'.', getFlag(OP::V)?'V':'.'
                 , '.', '.', getFlag(OP::D)?'D':'.', getFlag(OP::I)?'I':'.'
                 , getFlag(OP::Z)?'Z':'.', getFlag(OP::C)?'C':'.', mmu->read(PC()), disassembly().c_str());
         //printf("%04X\n", PC());
