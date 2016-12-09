@@ -239,8 +239,10 @@ void NES::CPU::eval() {
         push(P);
         break;
     case OP::PLA:
-        A = peek();
+        result = A = peek();
         pop();
+        FLAG_Z();
+        FLAG_N();
         break;
     case OP::PLP:
         P = peek();
