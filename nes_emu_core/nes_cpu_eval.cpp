@@ -20,8 +20,8 @@ void NES::CPU::eval() {
     case OP::ADC:
         result = A + mmu->read(nowAddr) + (getFlag(OP::C)?1:0);
         FLAG(this, result > 0x7F, OP::C);
+        FLAG(this, (A&0x80) != (result&0x80), OP::V);
         FLAG_Z();
-        FLAG_V();
         FLAG_N();
         A = result;
         if(readExtraCycle)
@@ -291,8 +291,8 @@ void NES::CPU::eval() {
         result = A-mmu->read(nowAddr);
         result-= 1-(getFlag(OP::C)?1:0);
         FLAG(this, result<0, OP::C);
+        FLAG(this, (A&0x80) != (result&0x80), OP::V);
         FLAG_Z();
-        FLAG_V();
         FLAG_N();
         break;
     case OP::SEC:
