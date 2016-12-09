@@ -246,14 +246,14 @@ public:
     
     enum flags {
         no_flags = 0x00,
-        C = 1<<0,
-        Z = 1<<1,
-        I = 1<<2,
-        D = 1<<3,
-        s1 = 1<<4,
-        s2 = 1<<5,
-        O = 1<<6,
-        N = 1<<7,
+        C = 1<<0, // Carry
+        Z = 1<<1, // Zero
+        I = 1<<2, // Interrupt disable
+        D = 1<<3, // Decimal mode
+        B = 1<<4, // Break command
+        U = 1<<5, // Unused. Always set.
+        V = 1<<6, // Overflow
+        N = 1<<7, // Negative
         all_flags = 0xFF
     };
 };

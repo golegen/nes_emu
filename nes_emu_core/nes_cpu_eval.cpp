@@ -3,7 +3,7 @@
 //http://obelisk.me.uk/6502/reference.html
 /*#define FLAG(X,Y) (setFlag((X) ? OP::(Y) : 0))*/
 #define FLAG_Z() (FLAG(this, result==0, OP::Z))
-#define FLAG_O() (FLAG(this, result > 0x7F || result < 0x80, OP::O))
+#define FLAG_V() (FLAG(this, result > 0x7F || result < 0x80, OP::V))
 #define FLAG_N() (FLAG(this, result & 0x80, OP::N))
 
 inline void FLAG(NES::CPU* const base, const bool condition, const int flag) {
@@ -21,7 +21,7 @@ void NES::CPU::eval() {
         result = A + mmu->read(nowAddr) + (getFlag(OP::C)?1:0);
         FLAG(this, result > 0x7F, OP::C);
         FLAG_Z();
-        FLAG_O();
+        FLAG_V();
         FLAG_N();
         A = result;
         if(readExtraCycle)
@@ -68,7 +68,7 @@ void NES::CPU::eval() {
         break;
     case OP::BIT:
         result = mmu->read(nowAddr);
-        FLAG(this, result&(1<<6), OP::O);
+        FLAG(this, result&(1<<6), OP::V);
         FLAG(this, result&(1<<7), OP::N);
         result&=A;
         FLAG_Z();
@@ -98,14 +98,14 @@ void NES::CPU::eval() {
         interrupt(true);
         break;
     case OP::BVC:
-        if(!getFlag(OP::O)) {
+        if(!getFlag(OP::V)) {
             PC(nowAddr);
             cycles+=readExtraCycle?3:1;
             inc_pc=false;
         }
         break;
     case OP::BVS:
-        if(getFlag(OP::O)) {
+        if(getFlag(OP::V)) {
             PC(nowAddr);
             cycles+=readExtraCycle?3:1;
             inc_pc=false;
@@ -121,7 +121,7 @@ void NES::CPU::eval() {
         clearFlag(OP::I);
         break;
     case OP::CLV:
-        clearFlag(OP::O);
+        clearFlag(OP::V);
         break;
     case OP::CMP:
         result = A - mmu->read(nowAddr);
@@ -235,7 +235,7 @@ void NES::CPU::eval() {
         push(A);
         break;
     case OP::PHP:
-        setFlag(OP::s1 | OP::s2);
+        setFlag(OP::B | OP::U);
         push(P);
         break;
     case OP::PLA:
@@ -245,7 +245,7 @@ void NES::CPU::eval() {
     case OP::PLP:
         P = peek();
         pop();
-        clearFlag(OP::s1 | OP::s2);
+        clearFlag(OP::B | OP::U);
         break;
     case OP::ROL:
         result = nowAddr==-1 ? A : mmu->read(nowAddr);
@@ -269,7 +269,7 @@ void NES::CPU::eval() {
         if(true) {
             P = peek();
             pop();
-            clearFlag(OP::s1 | OP::s2);
+            clearFlag(OP::B | OP::U);
             const int addr = peek();
             pop();
             PC((peek()<<8) | addr);
@@ -290,7 +290,7 @@ void NES::CPU::eval() {
         result-= 1-(getFlag(OP::C)?1:0);
         FLAG(this, result<0, OP::C);
         FLAG_Z();
-        FLAG_O();
+        FLAG_V();
         FLAG_N();
         break;
     case OP::SEC:

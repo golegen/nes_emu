@@ -30,7 +30,7 @@ void NES::CPU::tick() {
         decode();
         char msg[128];
         sprintf(msg, "[PC=$%04X, %c%c%c%c%c%c%c%c] $%02X %s"
-                , PC(), getFlag(OP::N)?'N':'.', getFlag(OP::O)?'V':'.'
+                , PC(), getFlag(OP::N)?'N':'.', getFlag(OP::V)?'V':'.'
                 , '.', '.', getFlag(OP::D)?'D':'.', getFlag(OP::I)?'I':'.'
                 , getFlag(OP::Z)?'Z':'.', getFlag(OP::C)?'C':'.', mmu->read(PC()), disassembly().c_str());
         //printf("%04X\n", PC());
@@ -46,7 +46,7 @@ void NES::CPU::tick() {
 void NES::CPU::interrupt(const bool fromIns, const bool maskable) {
     if(getFlag(OP::I) && !fromIns && maskable)
         return; //IRQ is masked
-    setFlag(fromIns?(OP::s1):0 | OP::s2);
+    setFlag(fromIns?(OP::B):0 | OP::U);
     push(PC());
     push(P);
     if(maskable || fromIns)
