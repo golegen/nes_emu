@@ -19,7 +19,7 @@ void NES::CPU::eval() {
     switch (op) {
     case OP::ADC:
         result = A + mmu->read(nowAddr) + (getFlag(OP::C)?1:0);
-        FLAG(this, result > 0x7F, OP::C);
+        FLAG(this, (A&0x40) && !(result&0x40), OP::C);
         FLAG(this, (A&0x80) != (result&0x80), OP::V);
         FLAG_Z();
         FLAG_N();
@@ -290,7 +290,7 @@ void NES::CPU::eval() {
     case OP::SBC:
         result = A-mmu->read(nowAddr);
         result-= 1-(getFlag(OP::C)?1:0);
-        FLAG(this, result<0, OP::C);
+        FLAG(this, (A&0x40) && !(result&0x40), OP::C);
         FLAG(this, (A&0x80) != (result&0x80), OP::V);
         FLAG_Z();
         FLAG_N();
