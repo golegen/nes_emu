@@ -2,7 +2,7 @@
 
 //http://obelisk.me.uk/6502/reference.html
 /*#define FLAG(X,Y) (setFlag((X) ? OP::(Y) : 0))*/
-#define FLAG_Z() (FLAG(this, result==0, OP::Z))
+#define FLAG_Z() (FLAG(this, (result & 0xFF) == 0, OP::Z))
 #define FLAG_V() (FLAG(this, result > 0x7F || result < 0x80, OP::V))
 #define FLAG_N() (FLAG(this, result & 0x80, OP::N))
 
