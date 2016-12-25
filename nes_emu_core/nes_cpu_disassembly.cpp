@@ -123,7 +123,7 @@ string NES::CPU::disassembly(unsigned int addr) {
         ret << "BVS";
         break;
     case OP::BCC:
-        ret << "BBC";
+        ret << "BCC";
         break;
     case OP::BCS:
         ret << "BCS";
