@@ -288,12 +288,15 @@ void NES::CPU::eval() {
         }
         break;
     case OP::SBC:
-        result = A-mmu->read(nowAddr);
-        result-= getFlag(OP::C)?1:0;
-        FLAG(this, (result&0x100) != 0, OP::C);
-        FLAG(this, ((A^result)&(mmu->read(nowAddr)^result)&0x80) != 0, OP::V);
+        result = A - (mmu->read(nowAddr) + (getFlag(OP::C)?0:1));
+        FLAG(this, (result&0x100) == 0, OP::C);
+        FLAG(this, ((A^result)&(((~mmu->read(nowAddr))&0xFF)^result)&0x80) != 0, OP::V);
         FLAG_Z();
         FLAG_N();
+        A = result;
+        if(readExtraCycle)
+            cycles++;
+        break;
         break;
     case OP::SEC:
         setFlag(OP::C);
