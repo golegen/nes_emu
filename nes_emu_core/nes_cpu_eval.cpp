@@ -338,8 +338,6 @@ void NES::CPU::eval() {
         break;
     case OP::TXS:
         S=X;
-        FLAG(this, X==0, OP::Z);
-        FLAG(this, X & 0x80, OP::N);
         break;
     case OP::TYA:
         A=Y;
