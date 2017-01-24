@@ -216,6 +216,7 @@ void NES::CPU::eval() {
             setFlag(OP::C);
         else
             clearFlag(OP::C);
+        result>>=1;
         if(nowAddr==-1)
             A = result;
         else
