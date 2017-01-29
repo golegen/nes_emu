@@ -36,8 +36,9 @@ void NES::CPU::eval() {
             cycles++;
         break;
     case OP::ASL:
-        result = (nowAddr==-1?A:mmu->read(nowAddr)) << 1;
-        FLAG(this, (nowAddr==-1?A:mmu->read(nowAddr)), OP::C);
+        result = nowAddr==-1 ? A : mmu->read(nowAddr);
+        FLAG(this, (result&0b10000000) != 0, OP::C);
+        result<<=1;
         if(nowAddr==-1)
             A = result;
         else
@@ -211,12 +212,9 @@ void NES::CPU::eval() {
         break;
     case OP::LSR:
         result = nowAddr==-1 ? A : mmu->read(nowAddr);
-        result&=0b01111111; //To ensure bit 7 is empty. Might not be needed.
-        if(result&1)
-            setFlag(OP::C);
-        else
-            clearFlag(OP::C);
+        FLAG(this, (result&1) != 0, OP::C);
         result>>=1;
+        result&=0b01111111; //To ensure bit 7 is empty. Might not be needed.
         if(nowAddr==-1)
             A = result;
         else
