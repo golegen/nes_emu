@@ -260,11 +260,15 @@ void NES::CPU::eval() {
         break;
     case OP::ROR:
         result = nowAddr==-1 ? A : mmu->read(nowAddr);
-        result = (result >> 1) | (result << 7);
+        result |= getFlag(OP::C) ? 0x100 : 0;
+        FLAG(this, (result&1) != 0, OP::C);
+        result >>= 1;
         if(nowAddr==-1)
             A=result;
         else
             mmu->write(nowAddr, result);
+        FLAG_Z();
+        FLAG_N();
         break;
     case OP::RTI:
         if(true) {
