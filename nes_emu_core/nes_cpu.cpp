@@ -108,20 +108,17 @@ void NES::CPU::fetchAddr() {
         opLength=3;
         break;
     case OP::izx:
-        addr = mmu->read((arg1 + X) % 256) + mmu->read((arg1 + X + 1) % 256) * 256;
+        addr = mmu->read((arg1 + X) & 0xFF) + (mmu->read((arg1 + X + 1) & 0xFF) << 8);
         opLength=2;
         break;
     case OP::izy:
-        do {
-            const int prefetch = mmu->read(arg1) + mmu->read((arg1 + 1) % 256) * 256;
-            addr = prefetch + Y;
-            readExtraCycle = (prefetch&0xFF00) != (addr&0xFF00);
-            writeExtraCycle=true;
-            opLength=2;
-        } while(false);
+        addr = (mmu->read(arg1) | (mmu->read(arg1 + 1) << 8)) + Y;
+        readExtraCycle = ((mmu->read(arg1) | (mmu->read(arg1 + 1)<<8))&0xFF00) != (addr&0xFF00);
+        writeExtraCycle=true;
+        opLength=2;
         break;
     case OP::rel:
-        addr = PC() + (arg1>127 ? arg1-256 : arg1) + 2;
+        addr = PC() + const_cast<int8_t>(arg1) + 2;
         readExtraCycle = (PC()&0xFF00) != (addr&0xFF00);
         opLength=2;
         break;
