@@ -118,7 +118,7 @@ void NES::CPU::fetchAddr() {
         opLength=2;
         break;
     case OP::rel:
-        addr = PC() + const_cast<int8_t>(arg1) + 2;
+        addr = PC() + static_cast<int8_t>(arg1) + 2;
         readExtraCycle = (PC()&0xFF00) != (addr&0xFF00);
         opLength=2;
         break;
