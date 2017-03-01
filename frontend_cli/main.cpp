@@ -5,6 +5,8 @@
 #include <thread>
 #include <sstream>
 
+#include "nestest.h"
+
 using namespace std;
 
 NES *nes;
@@ -33,6 +35,8 @@ void loop() {
         cout << "> ";
         getline(cin, nowline);
         istringstream stream(nowline);
+        stream.unsetf(ios::dec);
+        stream.unsetf(ios::hex);
         stream >> command;
         command = toUpperCase(command);
         if(command == "TICK")
@@ -48,6 +52,16 @@ void loop() {
             stream >> pc;
             nes->cpu->PC(pc);
         }
+        else if(command == "PUSH") {
+            unsigned int val;
+            stream >> val;
+            nes->cpu->push((uint8_t)val);
+        }
+        else if(command == "PEEK" || command == "POP") {
+            printf("%02X", nes->cpu->peek());
+            if(command == "POP")
+                nes->cpu->pop();
+        }
         else if(command == "OPEN" || command == "LOAD") {
             string filename;
             getline(stream, filename);
@@ -57,6 +71,10 @@ void loop() {
         }
         else if(command == "QUIT" || command == "EXIT")
             return;
+#ifdef TEST_NESTEST
+        else if(command == "RUN_NESTEST")
+            test_nestest(nes);
+#endif
         else
             clog << "Unrecognized command '" << command << '\'' << endl;
     }
