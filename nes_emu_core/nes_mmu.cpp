@@ -49,13 +49,14 @@ void NES::MMU::loadFileNSF(FILE* f) {
 }
 
 uint8_t NES::MMU::read(unsigned int addr) {
-    if(addr==0x2002)
-        return nes->ppu->readLatch(2);
-    else if(addr==-1) {
+    if(addr==-1) {
         throw "Tried reading A register through MMU. This should be fixed!";
         nes->printWarn("MMU", "Tried reading from register A through MMU.");
         return temporaryValue; //The trick...
     }
+    addr &= 0xFFFF; // Should be deleted with that '-1 trick'
+    if(addr==0x2002)
+        return nes->ppu->readLatch(2);
     else if(addr<0x2000)
         return ram[addr%0x800];
     else if(addr<0x4000)
@@ -72,7 +73,8 @@ void NES::MMU::write(unsigned int addr, uint8_t data) {
         nes->printWarn("MMU", "Tried writing to A through MMU. (Most likely by store instruction)");
         nes->cpu->A=data;
     }
-    else if(addr<0x2000)
+    addr &= 0xFFFF; // Should be deleted with that '-1 trick'
+    if(addr<0x2000)
         ram[addr%0x800]=data;
     else if(addr<0x4000)
         nes->ppu->writeLatch(addr, data);
