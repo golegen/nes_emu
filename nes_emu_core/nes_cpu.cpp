@@ -104,7 +104,7 @@ void NES::CPU::fetchAddr() {
         opLength=2;
         break;
     case OP::ind:
-        addr = mmu->read(arg2) | (mmu->read(arg2+1)<<8);
+        addr = mmu->read(arg2) | (mmu->read(((arg2+1)&0xFF) | (arg2&0xFF00)) << 8);
         opLength=3;
         break;
     case OP::izx:
