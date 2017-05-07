@@ -72,28 +72,25 @@ void loop() {
         else if(command == "QUIT" || command == "EXIT")
             return;
         else if(command == "READ") {
-            int read, digits;
             string type;
             stream >> type;
             if(toUpperCase(type) == "MEM") {
+                int digits = 1;
                 uint16_t addr = 0;
-                digits = 0;
                 stream >> addr >> digits;
                 switch(digits) {
                 case 1:
-                    read = nes->mmu->read(addr);
+                    printf("%02X\n", nes->mmu->read(addr));
                     break;
                 case 2:
-                    read = nes->mmu->read(addr) | (nes->mmu->read(addr+1) << 8);
+                    printf("%04X\n", nes->mmu->read(addr) | (nes->mmu->read(addr+1) << 8));
                     break;
                 default:
-                    digits = 1;
-                    read = nes->mmu->read(addr);
+                    printf("%02X\n", nes->mmu->read(addr));
                 }
             }
             else
                 continue;
-            printf(("%0"+itos(digits)+"X\n").c_str(), read);
         }
 #ifdef TEST_NESTEST
         else if(command == "RUN_NESTEST")
