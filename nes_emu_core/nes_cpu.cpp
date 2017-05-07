@@ -112,8 +112,8 @@ void NES::CPU::fetchAddr() {
         opLength=2;
         break;
     case OP::izy:
-        addr = (mmu->read(arg1) | (mmu->read(arg1 + 1) << 8)) + Y;
-        readExtraCycle = ((mmu->read(arg1) | (mmu->read(arg1 + 1)<<8))&0xFF00) != (addr&0xFF00);
+        addr = (mmu->read(arg1) | (mmu->read((arg1 + 1)&0xFF) << 8)) + Y;
+        readExtraCycle = ((mmu->read(arg1) | (mmu->read((arg1 + 1)&0xFF)<<8))&0xFF00) != (addr&0xFF00);
         writeExtraCycle=true;
         opLength=2;
         break;
