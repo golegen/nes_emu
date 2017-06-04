@@ -3,3 +3,4 @@ project(nes_emu)
 
 add_subdirectory(nes_emu_core)
 add_subdirectory(frontend_cli)
+add_subdirectory(frontend_sdl2)
