@@ -1,11 +1,14 @@
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.0)
 
 set(SDL_BUILD_FROM_SOURCE ON)
 
 set(FRONTEND_SDL2 main.cpp draw.cpp frontend_sdl2.h)
 add_executable(frontend_sdl2 ${FRONTEND_SDL2})
 
-find_package(SDL2)
+if(${CMAKE_VERSION} VERSION_GREATER 3.7 OR ${CMAKE_VERSION} VERSION_EQUAL 3.7)
+    cmake_minimum_required(VERSION 3.7)
+    find_package(SDL2)
+endif()
 
 if(${SDL2_FOUND})
     include_directories(${SDL2_INCLUDE_DIRS})
