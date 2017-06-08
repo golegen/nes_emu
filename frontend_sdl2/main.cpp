@@ -7,7 +7,7 @@ int main(int argc, char *argv[]) {
         printf("SDL_Init() Error: %s", SDL_GetError());
         return 1;
     }
-    SDL_Window *win = SDL_CreateWindow("Hello World!", 100, 100, 640, 480, SDL_WINDOW_SHOWN);
+    SDL_Window *win = SDL_CreateWindow("Hello World!", 100, 100, 640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     if(win == nullptr){
         printf("SDL_CreateWindow() Error: %s", SDL_GetError());
         SDL_Quit();
