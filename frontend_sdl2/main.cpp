@@ -1,5 +1,6 @@
 #include "SDL.h"
 #include <cstdio>
+#include "frontend_sdl2.h"
 
 int main(int argc, char *argv[]) {
     if(SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -29,6 +30,8 @@ int main(int argc, char *argv[]) {
                 break;
             }
         }
+        draw(ren);
+        SDL_RenderPresent(ren);
         SDL_Delay(1); // Prevent busy-waiting
     }
     SDL_DestroyRenderer(ren);

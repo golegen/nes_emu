@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.7)
 
 set(SDL_BUILD_FROM_SOURCE ON)
 
-set(FRONTEND_SDL2 main.cpp)
+set(FRONTEND_SDL2 main.cpp draw.cpp frontend_sdl2.h)
 add_executable(frontend_sdl2 ${FRONTEND_SDL2})
 
 find_package(SDL2)
