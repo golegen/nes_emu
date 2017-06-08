@@ -3,12 +3,18 @@
 
 uint32_t screen_buffer[320][240];
 
+//TODO: Bad interface. Should not contain any static variable
 void draw(SDL_Renderer *ren) {
-    //TODO: Use streaming texture instead
-    for(int i=0; i<320; i++) {
-        for (int j = 0; j < 240; j++) {
-            SDL_SetRenderDrawColor(ren, (screen_buffer[i][j]>>24)&0xFF, (screen_buffer[i][j]>>16)&0xFF, (screen_buffer[i][j]>>8)&0xFF, 0);
-            SDL_RenderDrawPoint(ren, i, j);
-        }
-    }
+    static SDL_Texture *tex = nullptr;
+    if(tex == nullptr)
+        tex = SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, 320, 240);
+    void *pixels;
+    int pitch;
+
+    SDL_LockTexture(tex, nullptr, &pixels, &pitch);
+    for(int i=0; i<320; i++)
+        for(int j=0; j<240; j++)
+            reinterpret_cast<uint32_t*>(pixels)[(pitch/4)*i + j] = screen_buffer[i][j];
+    SDL_UnlockTexture(tex);
+    SDL_RenderCopy(ren, tex, nullptr, nullptr);
 }
