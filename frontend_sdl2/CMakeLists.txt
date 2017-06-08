@@ -1,16 +1,19 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.7)
 
 set(SDL_BUILD_FROM_SOURCE ON)
 
 set(FRONTEND_SDL2 main.cpp)
 add_executable(frontend_sdl2 ${FRONTEND_SDL2})
 
-find_package(SDL 2)
+find_package(SDL2)
 
-if(${SDL_FOUND})
-    include_directories(${SDL_INCLUDE_DIRS})
-    set(SDL2_LIBRARIES ${SDL_LIBRARY})
+if(${SDL2_FOUND})
+    include_directories(${SDL2_INCLUDE_DIRS})
 elseif(${SDL_BUILD_FROM_SOURCE})
+    if(NOT WIN32)
+        #Build SDL2 is only for Windows for now. Maybe it will be fixed later.
+        message(FATAL_ERROR "Building SDL2 directly is only for Windows!!")
+    endif()
     include(ExternalProject)
     set(SDL_ARGS )
     if(WIN32)
