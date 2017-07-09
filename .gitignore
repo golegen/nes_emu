@@ -1,10 +1,13 @@
 # NetBeans IDE
-build
 dist
-nbproject/
+nbproject
 
-#CLion IDE
-.idea/
+# CLion IDE
+.idea
 
-#CMake
-cmake-build-debug/
+# Visual Studio CMake project
+.vs
+
+# Common CMake build directories
+build
+cmake-build-debug
